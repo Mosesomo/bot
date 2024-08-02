@@ -38,6 +38,10 @@ const generationConfig = {
   responseMimeType: "text/plain",
 };
 
+app.get('/', (req, res) => {
+	res.status(200).json({message: "welcome to gemini AI"});
+});
+
 let history = [];
 
 app.post('/chat', async (req, res) => {
