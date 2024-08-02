@@ -1,5 +1,6 @@
 const express = require('express');
 const bodyParser = require('body-parser');
+const cors = require('cors');
 const dotenv = require('dotenv');
 const { GoogleGenerativeAI } = require('@google/generative-ai');
 const fetchPolyfill = require('cross-fetch');
@@ -16,6 +17,7 @@ const app = express();
 const port = 3000;
 
 app.use(bodyParser.json());
+app.use(cors());
 
 const apiKey = process.env.GEMINI_API_KEY;
 if (!apiKey) {
