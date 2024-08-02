@@ -69,7 +69,7 @@ app.post('/chat', async (req, res) => {
 
   try {
     const response = await generateResponse(userInput);
-    res.json({ response });
+    res.json({ bot:  response });
   } catch (error) {
     console.error(error);
     res.status(500).send('Internal Server Error');
