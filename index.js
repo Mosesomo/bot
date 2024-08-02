@@ -57,6 +57,10 @@ async function generateResponse(userInput) {
   return result.response.text();
 }
 
+app.get('/', (req, res) => {
+	res.status(200).json({message: "Welcome to our health care assitant AI!!"});
+});
+
 app.post('/chat', async (req, res) => {
   const userInput = req.body.userInput;
   if (!userInput) {
