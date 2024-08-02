@@ -48,28 +48,29 @@ let history = [];
 
 app.post('/chat', async (req, res) => {
   const { prompt } = req.body;
-  console.log('Received prompt:', prompt); // Debugging line
+  console.log('Received prompt:', prompt);
 
   try {
     const chatSession = await model.startChat({
       ...generationConfig,
       history: history.map(entry => ({
         role: entry.role,
-        parts: [entry.content]  // Ensure content is in an array
+        parts: [entry.content]
       })),
     });
 
-    console.log('Chat session started'); // Debugging line
+    console.log('Chat session started');
 
     const result = await chatSession.sendMessage(prompt);
-    console.log('Received result:', result); // Debugging line
-
-    // Ensure result.response.text() is called correctly
-    const botResponse = typeof result.response.text === 'function'
-      ? await result.response.text()
-      : result.response.text;
-
-    // Update history with proper 'parts' format
+    console.log('Received result:', result);
+    let botResponse;
+    if (typeof result.response === 'object' && result.response !== null) {
+      if (typeof result.response.text === 'string') {
+        botResponse = result.response.text;
+      } else if (typeof result.response.text === 'function') {
+        botResponse = await result.response.text();
+      }
+    }
     history.push({ role: 'user', content: prompt });
     history.push({ role: 'model', content: botResponse });
 
@@ -79,6 +80,7 @@ app.post('/chat', async (req, res) => {
     res.status(500).json({ error: error.message });
   }
 });
+
 
 app.listen(port, () => {
   console.log(`Server is running on http://localhost:${port}`);
